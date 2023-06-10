@@ -26,7 +26,7 @@ const UserTable = () => {
   }
 
   function toggleFavouriteAcc(email) {
-    console.log("selected account", email);
+    ``
     setMarkFav(!markFav);
     let favIds = [];
     const alreadyMarkedFav = favAccounts.includes(email);
@@ -73,7 +73,7 @@ const UserTable = () => {
                     )}
                   </td>
                   <td onClick={() => handleAccountClick(account)}>{email}</td>
-                  <td>{}</td>
+                  <td>{ }</td>
                 </tr>
               </Fragment>
             );
