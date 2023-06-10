@@ -1,0 +1,100 @@
+.displayflex {
+  display: flex;
+}
+
+.justifyItemCenter {
+  justify-items: center;
+}
+
+.justifyContentCenter {
+  justify-content: center;
+}
+
+.alignItemCenter {
+  align-items: center;
+}
+
+.flexDirectionRow {
+  flex-direction: row;
+}
+
+.flexDirectionColumn {
+  flex-direction: column;
+}
+
+.marginBottom1 {
+  margin-bottom: 1em;
+}
+
+.inputField {
+  /* border-radius: 4px; */
+  margin: 0.6em 0;
+  outline: none;
+  padding: 0.3em;
+  border-bottom-color: #555;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+}
+
+.outerMostContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 100vh;
+}
+
+.container {
+  position: relative;
+  padding: 2em 3em 3em;
+  max-width: 13em;
+  min-width: 13em;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.errorMsg {
+  margin: 1em 0;
+  color: red;
+}
+
+.modalContainer {
+  border: 1px black;
+  height: 24em;
+  width: 24em;
+}
+
+table {
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 80%;
+  min-width: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+tr {
+  padding: 0 0.2em;
+}
+
+table th {
+  text-align: left;
+  padding: 0.5em 0.9em;
+}
+table td {
+  padding: 0.5em 0.9em;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  cursor: pointer;
+}
+thead tr {
+  height: 60px;
+  background: #8b7eb5;
+}

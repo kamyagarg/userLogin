@@ -1,0 +1,1 @@
+export const SET_USER_ACCOUNTS = "SET_USER_ACCOUNTS";
