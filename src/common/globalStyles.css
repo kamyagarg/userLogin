@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
 .displayflex {
   display: flex;
 }
@@ -97,4 +99,95 @@ tr:hover {
 thead tr {
   height: 60px;
   background: #8b7eb5;
+}
+
+body {
+  background: #f2f2f2;
+  font-family: "Open Sans", sans-serif;
+}
+
+.search {
+  width: 100%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 100%;
+  border: 3px solid #8b7eb5;
+  padding: 5px;
+  height: 20px;
+  border-radius: 5px;
+  outline: none;
+  color: #8b7eb5;
+}
+
+.searchTerm:focus {
+  color: #8b7eb5;
+}
+
+.wrap {
+  margin: 1rem;
+}
+
+.groupByType {
+  width: 50%;
+  border: 3px solid #564a7a;
+  padding: 5px;
+  height: 20px;
+  border-radius: 5px;
+  outline: none;
+  color: #4f3f84;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.groupByType:hover {
+  cursor: pointer;
+}
+
+.pagination {
+  margin: 10px;
+}
+
+.pageItem {
+  padding: 2px;
+  margin: 0 8px;
+  border-radius: 50%;
+}
+
+.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #594698;
+  size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10%;
+  border: 1px solid #a895e7;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.pageLink {
+  color: hsl(252, 41%, 43%);
+}
+
+.arrow {
+  font-weight: bold;
+  box-shadow: 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.arrow:hover {
+  box-shadow: 0 3px rgba(0, 0, 0, 0.4);
+}
+
+.pageItem:hover {
+  cursor: pointer;
 }

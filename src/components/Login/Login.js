@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { LOGIN_URL } from "../../common/Constants";
-import { setUserIds } from "../../Redux/Actions";
+import { LOGIN_URL, NOT_A_MEMBER } from "../../common/Constants";
+import { setLoggedInUserCreds, setlol } from "../../Redux/Actions";
+import { response } from "../../common/Mockdata";
 import "../../common/globalStyles.css";
 import axios from "axios";
 
@@ -21,22 +22,17 @@ const LoginPage = () => {
     try {
       const response = await axios.get(LOGIN_URL);
       const jsonRes = response?.data;
-      let userAvailableAcc = [];
       const userExists = jsonRes.find((userRes) => {
-        if (userRes.username === user && userRes.password === password) {
-          userAvailableAcc = userRes.availableIds;
-          console.log("id", userAvailableAcc);
-          return true;
-        }
+        return userRes.username === user && userRes.password === password;
       });
       if (userExists) {
         setSuccess(true);
         setIsLoading(false);
         setErrMsg("");
-        dispatch(setUserIds(userAvailableAcc));
+        dispatch(setLoggedInUserCreds({ username: user, password }))
         navigate("/usertable");
       } else {
-        setErrMsg("Not a member? Pleasee register");
+        setErrMsg(NOT_A_MEMBER);
       }
     } catch (err) {
       console.error(err);

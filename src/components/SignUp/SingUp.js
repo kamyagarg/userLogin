@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import {
   USERNAME_REGEX,
   PASSWORD_REGEX,
-  REGISTER_URL
+  REGISTER_URL,
 } from "../../common/Constants";
 import {
   faCheck,
   faTimes,
-  faInfoCircle
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
@@ -59,12 +59,9 @@ const LoginPage = () => {
         JSON.stringify({ user, pwd }),
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true
+          withCredentials: true,
         }
       );
-      console.log(response?.data);
-      console.log(response?.accessToken);
-      console.log(JSON.stringify(response));
       setSuccess(true);
       //clear state and controlled inputs
       //need value attrib on inputs for this

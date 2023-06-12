@@ -1,15 +1,15 @@
-import { SET_USER_ACCOUNTS } from "./Types";
+import { SET_LOGGED_IN_USER_ID, LOL } from "./Types";
 
 const INITIAL_STATE = {
-  loggedInUserIDs: []
+  loggedInUserCreds: {},
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case SET_USER_ACCOUNTS: {
+    case SET_LOGGED_IN_USER_ID: {
       return {
         ...state,
-        loggedInUserIDs: action.data
+        loggedInUserCreds: action.payload,
       };
     }
     default:

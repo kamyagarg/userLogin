@@ -4,7 +4,6 @@ import { SEARCH_BAR_PLACEHOLDER } from "../../common/Constants";
 const SearchBar = (props) => {
   const { searchVal } = props;
   const [searchBarVal, setSearchBarVal] = useState("");
-  // console.log("deatils 1", details);
 
   function handleSearchInput(e) {
     const searchedValue = e.target.value;
@@ -13,12 +12,16 @@ const SearchBar = (props) => {
   }
 
   return (
-    <div>
-      <input
-        value={searchBarVal}
-        placeholder={SEARCH_BAR_PLACEHOLDER}
-        onChange={handleSearchInput}
-      />
+    <div class="wrap">
+      <div class="search">
+        <input
+          type="text"
+          className="searchTerm"
+          value={searchBarVal}
+          placeholder={SEARCH_BAR_PLACEHOLDER}
+          onChange={handleSearchInput}
+        />
+      </div>
     </div>
   );
 };
