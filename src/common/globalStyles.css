@@ -101,6 +101,9 @@ thead tr {
   background: #8b7eb5;
 }
 
+.tableHeader {
+}
+
 body {
   background: #f2f2f2;
   font-family: "Open Sans", sans-serif;

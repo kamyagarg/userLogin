@@ -4,16 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import AccountInfo from "../AccountInfo/AccountInfo";
 import SearchBar from "../SearchBar/SearchBar";
 import CommonModal from "../../common/CommonComponents/CommonModal";
-import { setLastAccessedAt } from "../../Redux/Actions";
 import { USER_ACCOUNTS_URL } from "../../common/Constants";
 import Pagination from "../Pagination/Pagination";
+import { debounce } from "../../common/Utils";
 import "../../common/globalStyles.css";
 
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
-import SelectAllIcon from "@mui/icons-material/SelectAll";
-import DeselectIcon from "@mui/icons-material/Deselect";
 
 const UserTable = () => {
   const { loggedInUserCreds } = useSelector((state) => state?.loginReducers);
@@ -22,13 +20,12 @@ const UserTable = () => {
   const [displayAccountDetails, setDisplayAccountDetails] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState({});
   const [markFav, setMarkFav] = useState(false);
-  const [isGrouped, setIsGrouped] = useState(false);
   const [favAccounts, setFavAccounts] = useState([]);
   const [toggledSort, setToggleSort] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(3);
-  const nPages = Math.ceil(accountsToDisplay?.length / recordsPerPage);
+  const [toggleMarkAllFav, setToggleMarkAllFav] = useState(false);
+  const [recordsToShowPerPage] = useState(4);
 
   useEffect(() => {
     fetchData();
@@ -50,22 +47,8 @@ const UserTable = () => {
       }
     });
     setAccountsToDisplay(accounts?.availableIds);
-    setModifiedList(accounts?.availableIds.slice(0, 3));
+    setModifiedList(accounts?.availableIds.slice(0, recordsToShowPerPage));
   }
-
-  // useEffect(() => {
-  //   const storedVal = JSON.parse(localStorage.getItem("USER_EMAIL_ACCOUNTS"));
-  //   if (storedVal && storedVal?.length !== 0) {
-  //     setAccountsToDisplay(storedVal);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   localStorage.setItem(
-  //     "USER_EMAIL_ACCOUNTS",
-  //     JSON.stringify(loggedInUserCreds)
-  //   );
-  // }, [loggedInUserCreds]);
 
   function handleAccountClick(accountInfo) {
     setSelectedAccount(accountInfo);
@@ -82,27 +65,28 @@ const UserTable = () => {
     setFavAccounts(favIds);
   }
 
-  function debounce(fn, delay) {
-    let timerId;
-    return (...arg) => {
-      clearTimeout(timerId);
-      timerId = setTimeout(() => {
-        fn(...arg);
-      }, delay);
-    };
-  }
-
-  function searchTerm(searchTerm) {
-    if (!searchTerm.length) {
-      setModifiedList(accountsToDisplay);
+  function handleToggleSelectAllFavourites() {
+    setToggleMarkAllFav(!toggleMarkAllFav);
+    if (toggleMarkAllFav) {
+      setFavAccounts([]);
+    } else {
+      const allFavAcc = accountsToDisplay.map((acc) => acc.email);
+      setFavAccounts(allFavAcc);
     }
-    const filteredAccountsList = accountsToDisplay.filter((account) => {
-      return account.email.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-    setModifiedList(filteredAccountsList);
   }
 
-  const debounceSearchingTerm = debounce(searchTerm, 350);
+  function onTermSearch(searchTerm) {
+    if (!searchTerm?.length) {
+      accountsForPaginations();
+    } else {
+      const filteredAccountsList = accountsToDisplay.filter((account) => {
+        return account.email.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+      setModifiedList(filteredAccountsList);
+    }
+  }
+
+  const debounceSearchingTerm = debounce(onTermSearch, 350);
 
   function handleSortAccounts(sortByAttribute) {
     let sortedAccounts;
@@ -119,28 +103,27 @@ const UserTable = () => {
     setModifiedList(sortedAccounts);
   }
 
-  function toggleFav() {
-    if (favAccounts.length === 0) {
-      setShowErrorMessage("Please mark favourite");
-      setTimeout(() => {
-        setShowErrorMessage("");
-      }, 1000);
-      return;
-    }
-    if (favAccounts.length && !isGrouped) {
-      const groupByFavAcc = modifiedList.filter((acc) => {
-        if (favAccounts.includes(acc.email)) return acc;
-      });
-      setModifiedList(groupByFavAcc);
-    } else {
-      setModifiedList(accountsToDisplay);
-    }
-    setIsGrouped(!isGrouped);
+  // const groupBy = (key) => (array) =>
+  //   array.reduce((objectsByKeyValue, obj) => {
+  //     const value = obj[key];
+  //     objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+  //     return objectsByKeyValue;
+  //   }, {});
+    
+    const toggleGroupping = key => {
+  const list = modifiedList.reduce((accumulator, obj) => (
+    {
+      ...accumulator,
+      [obj[key]]: (accumulator[obj[key]] || []).concat(obj)
+    }),{}
+  );
+  
+  console.log("groupped list",list)
   }
 
   function accountsForPaginations() {
-    const indexOfLastRecord = currentPage * recordsPerPage;
-    const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    const indexOfLastRecord = currentPage * recordsToShowPerPage;
+    const indexOfFirstRecord = indexOfLastRecord - recordsToShowPerPage;
     const currentRecords = accountsToDisplay.slice(
       indexOfFirstRecord,
       indexOfLastRecord
@@ -148,43 +131,50 @@ const UserTable = () => {
     setModifiedList(currentRecords);
   }
 
-  const groupBy = (key) => (array) =>
-    array.reduce((objectsByKeyValue, obj) => {
-      const value = obj[key];
-      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-      return objectsByKeyValue;
-    }, {});
-
   return (
     <div className="displayflex flexDirectionColumn alignItemCenter justifyContentCenter">
       <span>User Details</span>
       <div className="displayflex alignItemCenter justifyContentCenter">
         <SearchBar searchVal={debounceSearchingTerm} />
-        <span className="groupByType" onClick={toggleFav}>
-          {isGrouped ? "Show All" : "Show Favourites"}
+        <span className="groupByType" onClick={() => toggleGroupping('domain')}>
+          Group by: email
         </span>
       </div>
       <table>
         <thead>
           <tr>
-            <th>Favourite</th>
-            <th onClick={() => handleSortAccounts("email")}>
-              Account Id <SwapVertIcon />
+            <th className="tableHeader">
+              <div onClick={handleToggleSelectAllFavourites}>
+                {toggleMarkAllFav ? <StarIcon /> : <StarBorderIcon />}
+              </div>
+              <span>Favourite</span>
             </th>
-            <th onClick={() => handleSortAccounts("lastAccessedAt")}>
-              Last Accessed
+            <th
+              className="tableHeader"
+              onClick={() => handleSortAccounts("email")}
+            >
+              <span>Account Id </span>
+              <SwapVertIcon />
+            </th>
+            <th
+              className="tableHeader"
+              onClick={() => handleSortAccounts("lastAccessedAt")}
+            >
+              <span> Last Accessed</span>
               <SwapVertIcon />
             </th>
           </tr>
         </thead>
         <tbody>
+          {console.log("here, mpdofeirf list", modifiedList)}
           {modifiedList?.map((account) => {
             const { email, lastAccessedAt } = account;
             return (
               <Fragment key={email}>
                 <tr>
                   <td onClick={() => toggleFavouriteAcc(email)}>
-                    {favAccounts.includes(email) ? (
+                    {console.log("fav accounts", favAccounts)}
+                    {favAccounts?.includes(email) ? (
                       <StarIcon />
                     ) : (
                       <StarBorderIcon />
@@ -199,9 +189,10 @@ const UserTable = () => {
         </tbody>
       </table>
       <Pagination
-        nPages={nPages}
+        recordsToShowPerPage={recordsToShowPerPage}
+        lengthOfTotalAccount={accountsToDisplay?.length}
         currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
+        changeCurrentPage={setCurrentPage}
       />
 
       {showErrorMessage && <div>{showErrorMessage}</div>}
