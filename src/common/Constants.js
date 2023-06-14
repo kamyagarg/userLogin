@@ -22,7 +22,7 @@ export const loginFieldsError = {
   passWordError: "Invalid Password",
 };
 
-export const NOT_A_MEMBER = "Not a member? Please register";
+export const NOT_A_MEMBER = "You are not registered with us!";
 
 const database = [
   {

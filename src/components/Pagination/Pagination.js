@@ -1,7 +1,8 @@
 import React from "react";
 
 const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
-  const pageNumbers = [...Array(nPages + 1).keys()].slice(1);
+  const pageNumbers = nPages && [...Array(nPages + 1).keys()].slice(1);
+  console.log("pageNumbers", pageNumbers);
 
   const nextPage = () => {
     if (currentPage !== nPages) setCurrentPage(currentPage + 1);
@@ -12,24 +13,25 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
   return (
     <div className="pagination displayflex justifyContentCenter alignItemCenter">
       <span className="pageItem">
-        <span className="pageLink arrow" onClick={prevPage}>
+        <button className="pageLink arrow" onClick={prevPage}>
           &lt;
-        </span>
+        </button>
       </span>
-      {pageNumbers.map((pgNumber) => (
-        <span
-          key={pgNumber}
-          className={`pageItem ${currentPage == pgNumber ? "active" : ""} `}
-        >
-          <span onClick={() => setCurrentPage(pgNumber)} className="pageLink">
-            {pgNumber}
+      {Array.isArray(pageNumbers) &&
+        pageNumbers?.map((pgNumber) => (
+          <span
+            key={pgNumber}
+            className={`pageItem ${currentPage == pgNumber ? "active" : ""} `}
+          >
+            <span onClick={() => setCurrentPage(pgNumber)} className="pageLink">
+              {pgNumber}
+            </span>
           </span>
-        </span>
-      ))}
+        ))}
       <span className="pageItem">
-        <span className="pageLink arrow" onClick={nextPage}>
+        <button className="pageLink arrow" onClick={nextPage}>
           &gt;
-        </span>
+        </button>
       </span>
     </div>
   );

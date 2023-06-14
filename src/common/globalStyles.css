@@ -177,6 +177,8 @@ body {
 
 .pageLink {
   color: hsl(252, 41%, 43%);
+  border: none;
+  cursor: pointer;
 }
 
 .arrow {
