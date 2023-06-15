@@ -27,8 +27,23 @@ const UserTable = () => {
   const [recordsToShowPerPage] = useState(4);
 
   useEffect(() => {
-    fetchData();
+    const localStorageData = JSON.parse(
+      localStorage.getItem("USER_ACCOUNT_DETAILS")
+    );
+    console.log("localdata", localStorageData);
+    if (localStorageData && localStorageData.length !== 0) {
+      setAccountsToDisplay(localStorageData);
+      const list = localStorageData?.slice(0, recordsToShowPerPage);
+      setTimeout(() => {
+        setModifiedList(list)}, 0);
+    } else {
+      fetchData();
+    }
   }, []);
+
+  // useEffect(() => {
+  //   console.log("use effect modifiedList", modifiedList);
+  // }, [modifiedList]);
 
   useEffect(() => {
     accountsForPaginations();
@@ -47,6 +62,10 @@ const UserTable = () => {
     });
     setAccountsToDisplay(accounts?.availableIds);
     setModifiedList(accounts?.availableIds.slice(0, recordsToShowPerPage));
+    localStorage.setItem(
+      "USER_ACCOUNT_DETAILS",
+      JSON.stringify(accounts?.availableIds)
+    );
   }
 
   function handleAccountClick(accountInfo) {
@@ -99,6 +118,7 @@ const UserTable = () => {
       });
     }
     setToggleSort(!toggledSort);
+    console.log("sortedAccounts!!!!", sortedAccounts);
     setModifiedList(sortedAccounts);
   }
 
@@ -145,18 +165,18 @@ const UserTable = () => {
         </thead>
         <tbody>
           {console.log("here, mpdofeirf list", modifiedList)}
-          {!modifiedList && (
+          {!modifiedList?.length && (
             <tr>
               <td>No accounts found</td>
             </tr>
           )}
+          {console.log("modifiedList in the render", modifiedList)}
           {modifiedList?.map((account) => {
             const { email, lastAccessedAt } = account;
             return (
               <Fragment key={email}>
                 <tr>
                   <td onClick={() => toggleFavouriteAcc(email)}>
-                    {console.log("fav accounts", favAccounts)}
                     {favAccounts?.includes(email) ? (
                       <StarIcon />
                     ) : (

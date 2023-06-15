@@ -8,7 +8,6 @@ const Pagination = (props) => {
   
   useEffect(() => {
       const totalNumber = Math.ceil( lengthOfTotalAccount / recordsToShowPerPage)
-      console.log("total num",totalNumber)
       const pageNumbersArray = totalNumber && [...Array(totalNumber + 1).keys()].slice(1);
       setTotalNumberOfPages(totalNumber)
       setPageNumbersArray(pageNumbersArray);

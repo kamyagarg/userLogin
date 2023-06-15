@@ -12,8 +12,8 @@ const SearchBar = (props) => {
   }
 
   return (
-    <div class="wrap">
-      <div class="search">
+    <div className="wrap">
+      <div className="search">
         <input
           type="text"
           className="searchTerm"
