@@ -6,22 +6,36 @@ import { CLOSE_CONST } from "../Constants";
 const CommonModal = (props) => {
   const { children, display, onClose } = props;
 
+  const customStyles = {
+    content: {
+      height: "50%",
+      width: "50%",
+    },
+  };
+
   return (
-    <div>
+    <div className="modal">
       <Modal
         isOpen={display}
-        // className="modalContainer"
+        className="modalContainer"
         ariaHideApp={false}
         style={{
           overlay: {
-            backgroundColor: "rgb(0,0,0.7)",
-            zindex: 1
-          }
+            backgroundColor: "rgba(0,0,0,0.4)",
+            zindex: 1,
+          },
         }}
         onRequestClose={onClose}
       >
-        <img src={close} alt={CLOSE_CONST} onClick={onClose} />
-        {children}
+        <div className="modalItems">
+          <img
+            src={close}
+            alt={CLOSE_CONST}
+            onClick={onClose}
+            className="crossImg"
+          />
+          {children}
+        </div>
       </Modal>
     </div>
   );

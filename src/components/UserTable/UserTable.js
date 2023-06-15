@@ -1,6 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-// import { response } from "../../common/Mockdata";
+import { useSelector } from "react-redux";
 import AccountInfo from "../AccountInfo/AccountInfo";
 import SearchBar from "../SearchBar/SearchBar";
 import CommonModal from "../../common/CommonComponents/CommonModal";
@@ -103,24 +102,6 @@ const UserTable = () => {
     setModifiedList(sortedAccounts);
   }
 
-  // const groupBy = (key) => (array) =>
-  //   array.reduce((objectsByKeyValue, obj) => {
-  //     const value = obj[key];
-  //     objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-  //     return objectsByKeyValue;
-  //   }, {});
-    
-    const toggleGroupping = key => {
-  const list = modifiedList.reduce((accumulator, obj) => (
-    {
-      ...accumulator,
-      [obj[key]]: (accumulator[obj[key]] || []).concat(obj)
-    }),{}
-  );
-  
-  console.log("groupped list",list)
-  }
-
   function accountsForPaginations() {
     const indexOfLastRecord = currentPage * recordsToShowPerPage;
     const indexOfFirstRecord = indexOfLastRecord - recordsToShowPerPage;
@@ -136,9 +117,6 @@ const UserTable = () => {
       <span>User Details</span>
       <div className="displayflex alignItemCenter justifyContentCenter">
         <SearchBar searchVal={debounceSearchingTerm} />
-        <span className="groupByType" onClick={() => toggleGroupping('domain')}>
-          Group by: email
-        </span>
       </div>
       <table>
         <thead>
@@ -167,6 +145,11 @@ const UserTable = () => {
         </thead>
         <tbody>
           {console.log("here, mpdofeirf list", modifiedList)}
+          {!modifiedList && (
+            <tr>
+              <td>No accounts found</td>
+            </tr>
+          )}
           {modifiedList?.map((account) => {
             const { email, lastAccessedAt } = account;
             return (

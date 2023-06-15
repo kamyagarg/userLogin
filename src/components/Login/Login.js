@@ -29,7 +29,7 @@ const LoginPage = () => {
         setSuccess(true);
         setIsLoading(false);
         setErrMsg("");
-        dispatch(setLoggedInUserCreds({ username: user, password }))
+        dispatch(setLoggedInUserCreds({ username: user, password }));
         navigate("/usertable");
       } else {
         setErrMsg(NOT_A_MEMBER);
@@ -42,7 +42,7 @@ const LoginPage = () => {
   return (
     <div className="outerMostContainer">
       <div className="displayflex justifyContentCenter alignItemCenter flexDirectionColumn container">
-        <div className="errorMsg">{errMsg}</div>
+        <div className={errMsg ? "errorMsg" : 'welcomeBack'}>{errMsg ? errMsg : 'Welcome Back'}</div>
         <form onSubmit={handleSubmit}>
           <div className="displayflex flexDirectionColumn marginBottom1">
             <input
@@ -67,7 +67,11 @@ const LoginPage = () => {
             />
           </div>
           <div className="displayflex justifyContentCenter alignItemCenter">
-            <input type="submit" value={isLoading ? "LOADING" : "SUBMIT"} />
+            <input
+              type="submit"
+              value={isLoading ? "LOADING" : "SUBMIT"}
+              className="submitButton"
+            />
           </div>
         </form>
         <div></div>

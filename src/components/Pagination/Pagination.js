@@ -27,7 +27,7 @@ const Pagination = (props) => {
           &lt;
         </button>
       </span>
-      {console.log("pageNumbersArray",pageNumbersArray)}
+      {!pageNumbersArray && <div>1</div>}
       {Array.isArray(pageNumbersArray) &&
         pageNumbersArray?.map((pgNumber) => (
           <span
